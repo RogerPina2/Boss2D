@@ -8,9 +8,13 @@ public class HeroKnightMoviment : MonoBehaviour
     public Animator animator;
 
     public float runSpeed = 40f;   
-    float horizontalMove = 0f;
-    bool jump;
-    bool roll;
+    private float horizontalMove = 0f;
+    private bool jump;
+    private bool roll;
+    private bool attack = false;
+    private int currentAttack = 1;
+    private float timeSinceAtack = 0f;
+    private bool block = false;
 
     // Start is called before the first frame update
     void Start()
@@ -21,10 +25,16 @@ public class HeroKnightMoviment : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Hero Knight Run
-        horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
-        animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
+        timeSinceAtack += Time.deltaTime;
         animator.SetBool("Grounded", controller.isGrounded);
+
+
+        // Hero Knight Run
+        if (!attack || !block)
+        {
+            horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
+            animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
+        }
 
         // Hero Knight Jump
         if (Input.GetButtonDown("Jump")) {
@@ -38,13 +48,48 @@ public class HeroKnightMoviment : MonoBehaviour
             roll = true;
             animator.SetBool("Roll", true);
         }
+
+        // Atack
+        if (Input.GetMouseButtonDown(0) && timeSinceAtack > 0.25f && !roll)
+        {
+            attack = true;
+
+            if (currentAttack == 1)
+            {
+                animator.SetTrigger("Attack1");
+            } else if (currentAttack == 2)
+            {
+                animator.SetTrigger("Attack2");
+            } else if (currentAttack == 3)
+            {
+                animator.SetTrigger("Attack3");
+            } else  
+            {
+                currentAttack = 0;
+            }
+
+            timeSinceAtack = 0f;
+
+            currentAttack++;
+        }
+
+        // Block
+        if (Input.GetMouseButtonDown(1) && !roll)
+        {
+            block = true;
+            animator.SetTrigger("Block");
+            // animator.SetBool("IdleBlock", true);
+        } else if (Input.GetMouseButtonUp(1)) {
+            block = false;
+        }
     }
 
     void FixedUpdate()
     {
-        controller.Move(horizontalMove * Time.fixedDeltaTime, jump, roll);
+        controller.Move(horizontalMove * Time.fixedDeltaTime, jump, roll, attack, block);
         jump = false;
         roll = false;
+        attack = false;
     }
 
     public void OnLanding()
