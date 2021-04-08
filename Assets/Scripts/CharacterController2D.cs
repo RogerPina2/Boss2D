@@ -24,7 +24,7 @@ public class CharacterController2D : MonoBehaviour
             OnLandEvent = new UnityEvent();
     }
 
-    public void Move(float move, bool jump, bool roll)
+    public void Move(float move, bool jump, bool roll, bool attack, bool block)
     {
         transform.Translate(move * 5.0f * Time.deltaTime, 0f, 0f);
 
@@ -33,25 +33,28 @@ public class CharacterController2D : MonoBehaviour
         else if (move < 0 && facingRight)
             Flip();
 
-        if (isGrounded) 
+        if (jump && isGrounded) 
         {
-            if (jump) 
-            {
-                rb.AddForce(new Vector2(0f, jumpForce));
-                isGrounded = false;
-            }
-
-            if (roll) 
-            {
-                if (facingRight)
-                    rb.velocity = new Vector2(rollForce, rb.velocity.y);
-                else  
-                    rb.velocity = new Vector2(-1 * rollForce, rb.velocity.y);
-
-                if (rollDisableCollider != null)
-                    StartCoroutine(WaitToEnable());
-            }
+            rb.AddForce(new Vector2(0f, jumpForce));
+            isGrounded = false;
         }
+
+        if (roll && isGrounded) 
+        {
+            if (facingRight)
+                rb.velocity = new Vector2(rollForce, rb.velocity.y);
+            else  
+                rb.velocity = new Vector2(-1 * rollForce, rb.velocity.y);
+
+            if (rollDisableCollider != null)
+                StartCoroutine(WaitToEnable());
+        }
+
+        if (attack)
+        {
+           //
+        }
+
     }
 
     private void Flip()
@@ -77,17 +80,5 @@ public class CharacterController2D : MonoBehaviour
         rollDisableCollider.enabled = false;
         yield return new WaitForSeconds(0.5f);
         rollDisableCollider.enabled = true;
-    }
-
-
-    public void Fight(bool attack, bool block)
-    {
-        if (attack) {
-            //
-        }
-
-        if (block) {
-            //
-        }
     }
 }
