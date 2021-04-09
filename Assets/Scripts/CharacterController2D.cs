@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class CharacterController2D : MonoBehaviour
 {
+    public Animator animator;
     [Header("Events")] [Space] public UnityEvent OnLandEvent;
 
     public Rigidbody2D rb;
@@ -12,12 +13,14 @@ public class CharacterController2D : MonoBehaviour
     private bool facingRight = true;
 
     public bool isGrounded;
+    public bool wallSide;
     [SerializeField] private float jumpForce = 250f;
     [SerializeField] private float rollForce = 1.2f;
     [SerializeField] private Collider2D rollDisableCollider;
 
     private void Awake()
     {
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
 
         if (OnLandEvent == null)
@@ -37,6 +40,11 @@ public class CharacterController2D : MonoBehaviour
         {
             rb.AddForce(new Vector2(0f, jumpForce));
             isGrounded = false;
+        }
+
+        if (wallSide)
+        {
+            animator.SetBool("WallSlide", true);
         }
 
         if (roll && isGrounded)
@@ -68,10 +76,17 @@ public class CharacterController2D : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "Wall")
+        if (collision.gameObject.tag == "Ground")
         {
             isGrounded = true;
             OnLandEvent.Invoke();
+            wallSide = false;
+        }
+
+        if (collision.gameObject.tag == "Wall") 
+        {
+            wallSide = true;
+            isGrounded = false;
         }
     }
 
