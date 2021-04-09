@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class CharacterController2D : MonoBehaviour
 {
-    [Header("Events")][Space] public UnityEvent OnLandEvent;
+    [Header("Events")] [Space] public UnityEvent OnLandEvent;
 
     public Rigidbody2D rb;
 
@@ -33,17 +33,17 @@ public class CharacterController2D : MonoBehaviour
         else if (move < 0 && facingRight)
             Flip();
 
-        if (jump && isGrounded) 
+        if (jump && isGrounded)
         {
             rb.AddForce(new Vector2(0f, jumpForce));
             isGrounded = false;
         }
 
-        if (roll && isGrounded) 
+        if (roll && isGrounded)
         {
             if (facingRight)
                 rb.velocity = new Vector2(rollForce, rb.velocity.y);
-            else  
+            else
                 rb.velocity = new Vector2(-1 * rollForce, rb.velocity.y);
 
             if (rollDisableCollider != null)
@@ -52,7 +52,7 @@ public class CharacterController2D : MonoBehaviour
 
         if (attack)
         {
-           //
+            //
         }
 
     }
@@ -68,7 +68,7 @@ public class CharacterController2D : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Ground")
+        if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "Wall")
         {
             isGrounded = true;
             OnLandEvent.Invoke();
