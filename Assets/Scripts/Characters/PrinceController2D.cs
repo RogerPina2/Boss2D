@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PrinceController2D : MonoBehaviour
 {
+    GameManager gm;
     public  Animator     animator;
     public  Rigidbody2D  rb;
 
@@ -15,6 +16,7 @@ public class PrinceController2D : MonoBehaviour
     [SerializeField] 
     public  float   runSpeed = 40f;
     private float   horizontalMove = 0f;
+    private bool    run = true;
 
     // Jump
     [SerializeField] 
@@ -35,17 +37,39 @@ public class PrinceController2D : MonoBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
+
+        gm = GameManager.GetInstance();
     }
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        gm = GameManager.GetInstance();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Movimentation
+        if (gm.gameState != GameManager.GameState.GAME)
+            return;
+        else
+            run = true;
+        
+        if (Input.GetKeyDown(KeyCode.Escape) && gm.gameState == GameManager.GameState.GAME)
+        {
+            run = false;
+            gm.ChangeState(GameManager.GameState.PAUSE);
+        }   
+
+        // Morte por queda
+        if (transform.position.y < -8)
+        {
+            Reset();
+            Debug.Log($"Vidas: {gm.lifes}");
+            Debug.Log($"Pontos: {gm.points}");
+        }
+    
+        // === Prince Movimentation ===
         animator.SetBool("Grounded", isGrounded);
         animator.SetFloat("AirSpeedY", rb.velocity.y);
         timeSinceAttack += Time.deltaTime;
@@ -55,7 +79,10 @@ public class PrinceController2D : MonoBehaviour
 
         // Jump
         if (Input.GetButtonDown("Jump") && !jump) 
+        {
             jump = true;
+            roll = false;
+        }
 
         // Roll
         if (Input.GetKeyDown(KeyCode.LeftShift) && !roll)
@@ -63,6 +90,7 @@ public class PrinceController2D : MonoBehaviour
             animator.SetBool("Roll", true);
             roll = true;
         }
+
         // Attack
         if (Input.GetMouseButtonDown(0) && timeSinceAttack > 0.25f && !roll)
         {
@@ -80,6 +108,17 @@ public class PrinceController2D : MonoBehaviour
         }
     }
 
+    private void Reset()
+    {
+        if (gm.lifes <= 0 && gm.gameState == GameManager.GameState.GAME)
+            gm.ChangeState(GameManager.GameState.ENDGAME);
+
+        Vector3 playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
+        transform.position = new Vector3(-6, 0, 0);
+    
+        gm.lifes--;
+    }
+
     void FixedUpdate()
     {
         Move();
@@ -89,7 +128,8 @@ public class PrinceController2D : MonoBehaviour
     private void Move()
     {
         // Run
-        transform.Translate(horizontalMove * Time.deltaTime * 3.5f * Time.fixedDeltaTime, 0f, 0f);
+        if (run)
+            transform.Translate(horizontalMove * Time.deltaTime * 3.5f * Time.fixedDeltaTime, 0f, 0f);
 
         if (horizontalMove > 0 && !facingRight)
             Flip();
