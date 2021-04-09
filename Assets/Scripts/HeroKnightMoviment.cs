@@ -88,12 +88,18 @@ public class HeroKnightMoviment : MonoBehaviour
     {
         controller.Move(horizontalMove * Time.fixedDeltaTime, jump, roll, attack, block);
         jump = false;
-        roll = false;
         attack = false;
     }
 
     public void OnLanding()
     {
         animator.SetBool("Jump", false);
+    }
+
+    // Animation Events
+    // Called in end of roll animation.
+    void ResetRoll()
+    {
+        roll = false;
     }
 }
