@@ -27,17 +27,16 @@ public class OldMan : MonoBehaviour
             dir = dir * -1;
             Flip();
         }
-        else if (collision.gameObject.tag == "Player") Die();
     }
 
     private void Flip()
     {
-        Vector3 theScale = transform.localScale;
+        Vector2 theScale = transform.localScale;
         theScale.x *= -1;
         transform.localScale = theScale;
     }
 
-    private void Die()
+    public void Die()
     {
         Destroy(oldMan.gameObject);
     }
