@@ -4,41 +4,48 @@ using UnityEngine;
 
 public class PrinceController2D : MonoBehaviour
 {
-    GameManager gm;
+    private GameManager gm;
     public Animator animator;
     public Rigidbody2D rb;
+    public int gameOverScene = 4;
 
     // Movimentation
     private bool facingRight = true;
+
     private bool isGrounded;
     private bool canMove;
 
     // Run
     [SerializeField]
     public float runSpeed = 40f;
+
     private float horizontalMove = 0f;
     private bool run = true;
 
     // Jump
     [SerializeField]
     public float jumpForce = 250f;
+
     private bool jump;
 
     // Roll
     [SerializeField] private Collider2D rollDisableCollider;
+
     [SerializeField] private float rollForce = 3f;
     private bool roll;
 
     // Attack
     private float timeSinceAttack = 0f;
+
     private int currentAttack = 0;
     private bool attack;
     private float attackRadius = 1.5f;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         animator = GetComponent<Animator>();
+        run = true;
         canMove = true;
         gm = GameManager.GetInstance();
     }
@@ -50,23 +57,17 @@ public class PrinceController2D : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (gm.gameState != GameManager.GameState.GAME)
+        if (gm.isPaused)
         {
             canMove = false;
-            return;
+            run = false;
         }
         else
         {
-            run = true;
             canMove = true;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape) && gm.gameState == GameManager.GameState.GAME)
-        {
-            run = false;
-            gm.ChangeState(GameManager.GameState.PAUSE);
+            run = true;
         }
 
         // Morte por queda
@@ -85,43 +86,46 @@ public class PrinceController2D : MonoBehaviour
         // Run
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
 
-        // Jump
-        if (Input.GetButtonDown("Jump") && !jump)
+        if (canMove)
         {
-            jump = true;
-            roll = false;
-        }
+            // Jump
+            if (Input.GetButtonDown("Jump") && !jump)
+            {
+                jump = true;
+                roll = false;
+            }
 
-        // Roll
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !roll)
-        {
-            animator.SetBool("Roll", true);
-            roll = true;
-        }
+            // Roll
+            if (Input.GetKeyDown(KeyCode.LeftShift) && !roll)
+            {
+                animator.SetBool("Roll", true);
+                roll = true;
+            }
 
-        // Attack
-        if (Input.GetMouseButtonDown(0) && timeSinceAttack > 0.25f && !roll)
-        {
-            attack = true;
+            // Attack
+            if (Input.GetMouseButtonDown(0) && timeSinceAttack > 0.25f && !roll)
+            {
+                attack = true;
 
-            currentAttack++;
+                currentAttack++;
 
-            if (currentAttack > 3)
-                currentAttack = 1;
+                if (currentAttack > 3)
+                    currentAttack = 1;
 
-            if (timeSinceAttack > 1.0f)
-                currentAttack = 1;
+                if (timeSinceAttack > 1.0f)
+                    currentAttack = 1;
 
-            timeSinceAttack = 0f;
+                timeSinceAttack = 0f;
+            }
         }
     }
 
     private void Reset()
     {
-        if (gm.lifes <= 0 && gm.gameState == GameManager.GameState.GAME)
-        {
-            gm.ChangeState(GameManager.GameState.ENDGAME);
-        }
+        //if (gm.lifes <= 0)
+        //{
+        //    SceneManager.LoadScene(gameOverScene);
+        //}
 
         Vector3 playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
         transform.position = new Vector3(-6, 0, 0);
@@ -129,7 +133,7 @@ public class PrinceController2D : MonoBehaviour
         gm.lifes--;
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         Move();
         Combat();
@@ -210,7 +214,6 @@ public class PrinceController2D : MonoBehaviour
         animator.SetBool("Jump", false);
     }
 
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Ground")
@@ -222,7 +225,7 @@ public class PrinceController2D : MonoBehaviour
 
     // Animation Events
     // Called in end of roll animation.
-    void AE_ResetRoll()
+    private void AE_ResetRoll()
     {
         roll = false;
     }

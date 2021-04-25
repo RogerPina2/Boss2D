@@ -14,28 +14,14 @@ public class GameManager
         return _instance;
     }
 
-    public delegate void ChangeStateDelegate();
-    public static ChangeStateDelegate changeStateDelegate;
-
-    public enum GameState {MENU, GAME, PAUSE, ENDGAME};
-
-    public GameState gameState {get; private set;}
     public int lifes;
     public int points;
+    public bool isPaused = false;
 
     private GameManager()
     {
         lifes = 3;
         points = 0;
-        gameState = GameState.MENU;
-    }
-
-    public void ChangeState(GameState nextState)
-    {
-        if (nextState == GameState.GAME) Reset();
-
-        gameState = nextState;
-        changeStateDelegate();
     }
 
     private void Reset()
