@@ -5,33 +5,34 @@ using UnityEngine;
 public class PrinceController2D : MonoBehaviour
 {
     GameManager gm;
-    public  Animator     animator;
-    public  Rigidbody2D  rb;
+    public Animator animator;
+    public Rigidbody2D rb;
 
     // Movimentation
-    private bool    facingRight = true;
-    private bool    isGrounded;
+    private bool facingRight = true;
+    private bool isGrounded;
 
     // Run
-    [SerializeField] 
-    public  float   runSpeed = 40f;
-    private float   horizontalMove = 0f;
-    private bool    run = true;
+    [SerializeField]
+    public float runSpeed = 40f;
+    private float horizontalMove = 0f;
+    private bool run = true;
 
     // Jump
-    [SerializeField] 
-    public  float   jumpForce = 250f;
-    private bool    jump;
- 
+    [SerializeField]
+    public float jumpForce = 250f;
+    private bool jump;
+
     // Roll
     [SerializeField] private Collider2D rollDisableCollider;
     [SerializeField] private float rollForce = 1.2f;
-    private bool    roll;
+    private bool roll;
 
     // Attack
-    private float   timeSinceAttack = 0f;
-    private int     currentAttack = 0;
-    private bool    attack;
+    private float timeSinceAttack = 0f;
+    private int currentAttack = 0;
+    private bool attack;
+    private float attackRadius = 1f;
 
     // Start is called before the first frame update
     void Start()
@@ -54,12 +55,12 @@ public class PrinceController2D : MonoBehaviour
             return;
         else
             run = true;
-        
+
         if (Input.GetKeyDown(KeyCode.Escape) && gm.gameState == GameManager.GameState.GAME)
         {
             run = false;
             gm.ChangeState(GameManager.GameState.PAUSE);
-        }   
+        }
 
         // Morte por queda
         if (transform.position.y < -8)
@@ -68,7 +69,7 @@ public class PrinceController2D : MonoBehaviour
             Debug.Log($"Vidas: {gm.lifes}");
             Debug.Log($"Pontos: {gm.points}");
         }
-    
+
         // === Prince Movimentation ===
         animator.SetBool("Grounded", isGrounded);
         animator.SetFloat("AirSpeedY", rb.velocity.y);
@@ -78,7 +79,7 @@ public class PrinceController2D : MonoBehaviour
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
 
         // Jump
-        if (Input.GetButtonDown("Jump") && !jump) 
+        if (Input.GetButtonDown("Jump") && !jump)
         {
             jump = true;
             roll = false;
@@ -115,7 +116,7 @@ public class PrinceController2D : MonoBehaviour
 
         Vector3 playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
         transform.position = new Vector3(-6, 0, 0);
-    
+
         gm.lifes--;
     }
 
@@ -138,14 +139,14 @@ public class PrinceController2D : MonoBehaviour
         animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
 
         // Jump
-        if (jump && isGrounded) 
+        if (jump && isGrounded)
         {
             animator.SetBool("Jump", true);
             rb.AddForce(new Vector2(0f, jumpForce));
             isGrounded = false;
             jump = false;
         }
-        
+
         // Roll
         if (roll && isGrounded)
         {
@@ -162,8 +163,17 @@ public class PrinceController2D : MonoBehaviour
     private void Combat()
     {
         // Attack
-        if (attack) {
+        if (attack)
+        {
             animator.SetTrigger("Attack" + currentAttack);
+            Collider2D[] swordHit = Physics2D.OverlapCircleAll(new Vector2(transform.position.x + 1, transform.position.y), attackRadius);
+            foreach (Collider2D col in swordHit)
+            {
+                if (col.gameObject.tag == "oldMan")
+                {
+                    col.gameObject.GetComponent<OldMan>().Die();
+                };
+            }
             attack = false;
         }
     }
