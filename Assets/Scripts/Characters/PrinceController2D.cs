@@ -11,6 +11,7 @@ public class PrinceController2D : MonoBehaviour
     // Movimentation
     private bool facingRight = true;
     private bool isGrounded;
+    private bool canMove;
 
     // Run
     [SerializeField]
@@ -25,20 +26,20 @@ public class PrinceController2D : MonoBehaviour
 
     // Roll
     [SerializeField] private Collider2D rollDisableCollider;
-    [SerializeField] private float rollForce = 1.2f;
+    [SerializeField] private float rollForce = 3f;
     private bool roll;
 
     // Attack
     private float timeSinceAttack = 0f;
     private int currentAttack = 0;
     private bool attack;
-    private float attackRadius = 1f;
+    private float attackRadius = 1.5f;
 
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
-
+        canMove = true;
         gm = GameManager.GetInstance();
     }
 
@@ -52,9 +53,15 @@ public class PrinceController2D : MonoBehaviour
     void Update()
     {
         if (gm.gameState != GameManager.GameState.GAME)
+        {
+            canMove = false;
             return;
+        }
         else
+        {
             run = true;
+            canMove = true;
+        }
 
         if (Input.GetKeyDown(KeyCode.Escape) && gm.gameState == GameManager.GameState.GAME)
         {
@@ -112,7 +119,9 @@ public class PrinceController2D : MonoBehaviour
     private void Reset()
     {
         if (gm.lifes <= 0 && gm.gameState == GameManager.GameState.GAME)
+        {
             gm.ChangeState(GameManager.GameState.ENDGAME);
+        }
 
         Vector3 playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
         transform.position = new Vector3(-6, 0, 0);
@@ -128,53 +137,62 @@ public class PrinceController2D : MonoBehaviour
 
     private void Move()
     {
-        // Run
-        if (run)
-            transform.Translate(horizontalMove * Time.deltaTime * 3.5f * Time.fixedDeltaTime, 0f, 0f);
-
-        if (horizontalMove > 0 && !facingRight)
-            Flip();
-        else if (horizontalMove < 0 && facingRight)
-            Flip();
-        animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
-
-        // Jump
-        if (jump && isGrounded)
+        if (canMove)
         {
-            animator.SetBool("Jump", true);
-            rb.AddForce(new Vector2(0f, jumpForce));
-            isGrounded = false;
-            jump = false;
-        }
+            // Run
+            if (run)
+                transform.Translate(horizontalMove * Time.deltaTime * 3.5f * Time.fixedDeltaTime, 0f, 0f);
 
-        // Roll
-        if (roll && isGrounded)
-        {
-            if (facingRight)
-                rb.velocity = new Vector2(rollForce, rb.velocity.y);
-            else
-                rb.velocity = new Vector2(-1 * rollForce, rb.velocity.y);
+            if (horizontalMove > 0 && !facingRight)
+                Flip();
+            else if (horizontalMove < 0 && facingRight)
+                Flip();
+            animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
 
-            if (rollDisableCollider != null)
-                StartCoroutine(WaitToEnable());
+            // Jump
+            if (jump && isGrounded)
+            {
+                animator.SetBool("Jump", true);
+                rb.AddForce(new Vector2(0f, jumpForce));
+                isGrounded = false;
+                jump = false;
+            }
+
+            // Roll
+            if (roll && isGrounded)
+            {
+                if (facingRight)
+                    rb.velocity = new Vector2(rollForce, rb.velocity.y);
+                else
+                    rb.velocity = new Vector2(-1 * rollForce, rb.velocity.y);
+
+                if (rollDisableCollider != null)
+                    StartCoroutine(WaitToEnable());
+            }
         }
     }
 
     private void Combat()
     {
+        List<string> ignore = new List<string> { "Wall", "Ground", "Player" };
         // Attack
         if (attack)
         {
+            this.gameObject.layer = LayerMask.NameToLayer("Default");
+            // Debug.Log(this.gameObject.layer);
             animator.SetTrigger("Attack" + currentAttack);
-            Collider2D[] swordHit = Physics2D.OverlapCircleAll(new Vector2(transform.position.x + 1, transform.position.y), attackRadius);
+            Collider2D[] swordHit = Physics2D.OverlapCircleAll(new Vector2(transform.position.x + 1f, transform.position.y), attackRadius);
             foreach (Collider2D col in swordHit)
             {
-                if (col.gameObject.tag == "oldMan")
+                if (!ignore.Contains(col.gameObject.tag))
                 {
+                    Debug.Log("Hit object with tag " + col.gameObject.tag + "!");
                     col.gameObject.GetComponent<OldMan>().Die();
                 };
             }
             attack = false;
+            this.gameObject.layer = LayerMask.NameToLayer("Player");
+            // Debug.Log(this.gameObject.layer);
         }
     }
 

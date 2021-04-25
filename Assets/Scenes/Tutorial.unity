@@ -130,7 +130,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 343816210}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Decoration
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 353019474}
   - component: {fileID: 353019476}
   m_Layer: 5
-  m_Name: UI_Lifes
+  m_Name: UI_Lives
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -230,7 +230,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Lifes: '
+  m_Text: 'Lives: '
 --- !u!222 &353019475
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -365,7 +365,7 @@ GameObject:
   - component: {fileID: 391714902}
   - component: {fileID: 391714901}
   - component: {fileID: 391714900}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tilemap_Wall
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -1149,7 +1149,7 @@ GameObject:
   m_Component:
   - component: {fileID: 479073234}
   - component: {fileID: 479073233}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TX Village Props_83
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1231,7 +1231,7 @@ GameObject:
   m_Component:
   - component: {fileID: 497914897}
   - component: {fileID: 497914898}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TX Village Props_104
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1423,7 +1423,7 @@ GameObject:
   m_Component:
   - component: {fileID: 564883491}
   - component: {fileID: 564883490}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TX Village Props_83
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1583,7 +1583,7 @@ GameObject:
   m_Component:
   - component: {fileID: 644405326}
   - component: {fileID: 644405325}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1631,7 +1631,7 @@ GameObject:
   - component: {fileID: 703151849}
   - component: {fileID: 703151848}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: MenusCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1737,7 +1737,7 @@ GameObject:
   - component: {fileID: 723406385}
   m_Layer: 0
   m_Name: OldMan
-  m_TagString: Untagged
+  m_TagString: oldMan
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2171,7 +2171,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1125609960}
   - component: {fileID: 1125609961}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TX Village Props_108
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2252,7 +2252,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1171655838}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TutorialMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2966,7 +2966,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1527820975}
   - component: {fileID: 1527820976}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TX Village Props_109
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3178,7 +3178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1599057911}
   - component: {fileID: 1599057910}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TX Village Props_104
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3340,7 +3340,7 @@ GameObject:
   - component: {fileID: 1752394524}
   - component: {fileID: 1752394523}
   - component: {fileID: 1752394525}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tilemap_Ground
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -7838,7 +7838,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1824059775}
   - component: {fileID: 1824059774}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TX Village Props_129
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7923,7 +7923,7 @@ GameObject:
   - component: {fileID: 1842878991}
   - component: {fileID: 1842878990}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: ControlsCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8019,7 +8019,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1911459454}
   - component: {fileID: 1911459453}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TX Village Props_130
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8334,7 +8334,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2090843042}
   - component: {fileID: 2090843041}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TX Village Props_105
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8627,6 +8627,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Prince
+      objectReference: {fileID: 0}
+    - target: {fileID: 8568553833178872598, guid: 95b2c8c4816d8f7489bd29134d7c9b57,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8568553833178872598, guid: 95b2c8c4816d8f7489bd29134d7c9b57,
         type: 3}
