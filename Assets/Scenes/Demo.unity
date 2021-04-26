@@ -8419,11 +8419,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6131842148520473757, guid: 95b2c8c4816d8f7489bd29134d7c9b57,
         type: 3}
-      propertyPath: jumpForce
-      value: 275
-      objectReference: {fileID: 0}
-    - target: {fileID: 6131842148520473757, guid: 95b2c8c4816d8f7489bd29134d7c9b57,
-        type: 3}
       propertyPath: rollForce
       value: 1.5
       objectReference: {fileID: 0}

@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 2390219099740529638}
   - component: {fileID: 6211095779393791093}
   - component: {fileID: 6131842148520473757}
-  - component: {fileID: 1780210197600259521}
   m_Layer: 0
   m_Name: Prince
   m_TagString: Player
@@ -229,39 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0896a6d59e88de94eb586fc48b97c450, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 428400874433961905}
   rb: {fileID: 6714977824596705827}
-  animator: {fileID: 428400874433961905}
-  OnLandEvent:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1780210197600259521}
-        m_MethodName: OnLanding
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  inGame: 0
-  isGrounded: 0
-  jumpForce: 300
-  rollDisableCollider: {fileID: 2390219099740529638}
-  rollForce: 1.2
---- !u!114 &1780210197600259521
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8568553833178872598}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 972dba7f4fecb0c44bb83093879d32fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 428400874433961905}
-  controller: {fileID: 6131842148520473757}
   runSpeed: 40
+  jumpForce: 250
