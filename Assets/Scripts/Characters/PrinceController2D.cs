@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PrinceController2D : MonoBehaviour
 {
@@ -178,7 +179,7 @@ public class PrinceController2D : MonoBehaviour
 
     private void Combat()
     {
-        List<string> ignore = new List<string> { "Wall", "Ground", "Player" };
+        List<string> ignore = new List<string> { "Wall", "Ground", "Player", "Edge" };
         // Attack
         if (attack)
         {
@@ -221,6 +222,11 @@ public class PrinceController2D : MonoBehaviour
             isGrounded = true;
             OnLanding();
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "levelEnd") SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     // Animation Events

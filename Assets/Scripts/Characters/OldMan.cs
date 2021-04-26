@@ -1,43 +1,39 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class OldMan : MonoBehaviour
 {
-    public int dir;
+    public bool facingRight;
     public float speed;
-    public GameObject oldMan;
+    public float scale;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-
+        facingRight = true;
+        scale = 4;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        oldMan.transform.Translate(dir * speed * Time.deltaTime, 0.0f, 0.0f);
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Wall")
+        if (facingRight)
         {
-            dir = dir * -1;
-            Flip();
+            transform.Translate(speed * Time.deltaTime, 0.0f, 0.0f);
+            transform.localScale = new Vector2(scale, scale);
+        }
+        else {
+            transform.Translate(-1 * speed * Time.deltaTime, 0.0f, 0.0f);
+            transform.localScale = new Vector2(-scale, scale);
         }
     }
 
-    private void Flip()
+    void OnTriggerEnter2D(Collider2D collider)
     {
-        Vector3 theScale = transform.localScale;
-        theScale.x *= -1;
-        transform.localScale = theScale;
+        if (collider.gameObject.tag == "Edge") facingRight = !facingRight;
     }
 
     public void Die()
     {
-        Destroy(oldMan.gameObject);
+        Destroy(this.gameObject);
     }
 }
