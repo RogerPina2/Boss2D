@@ -232,3 +232,6 @@ MonoBehaviour:
   rb: {fileID: 6714977824596705827}
   runSpeed: 40
   jumpForce: 250
+  rollDisableCollider: {fileID: 0}
+  rollForce: 1.2
+  attack: 0

@@ -27,7 +27,6 @@ public class OldMan : MonoBehaviour
             dir = dir * -1;
             Flip();
         }
-        else if (collision.gameObject.tag == "Player") Die();
     }
 
     private void Flip()
@@ -37,7 +36,7 @@ public class OldMan : MonoBehaviour
         transform.localScale = theScale;
     }
 
-    private void Die()
+    public void Die()
     {
         Destroy(oldMan.gameObject);
     }
