@@ -11,6 +11,8 @@ TagManager:
   - falling
   - villager
   - villagerIdle
+  - boss
+  - gameEnd
   layers:
   - Default
   - TransparentFX

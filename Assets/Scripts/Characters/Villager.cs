@@ -21,15 +21,19 @@ public class Villager : MonoBehaviour
             transform.Translate(speed * Time.deltaTime, 0.0f, 0.0f);
             transform.localScale = new Vector2(scale, scale);
         }
-        else {
+        else
+        {
             transform.Translate(-1 * speed * Time.deltaTime, 0.0f, 0.0f);
             transform.localScale = new Vector2(-scale, scale);
         }
     }
 
-    void OnTriggerEnter2D(Collider2D collider)
+    private void OnTriggerEnter2D(Collider2D collider)
     {
-        if (collider.gameObject.tag == "Edge") facingRight = !facingRight;
+        if (collider.gameObject.tag == "Edge")
+        {
+            facingRight = !facingRight;
+        }
     }
 
     public void Die()

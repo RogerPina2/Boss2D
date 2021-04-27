@@ -20,13 +20,6 @@ public class GameManager
 
     private GameManager()
     {
-        lifes = 3;
-        points = 0;
-    }
-
-    private void Reset()
-    {
-        lifes = 3;
-        points = 0;
+        lifes = 1;
     }
 }

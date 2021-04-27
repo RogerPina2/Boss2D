@@ -8,7 +8,9 @@ public class PrinceController2D : MonoBehaviour
     private GameManager gm;
     public Animator animator;
     public Rigidbody2D rb;
-    public int gameOverScene = 4;
+    public int nextLevel;
+    public int gameOverScene;
+    public int endingScene;
 
     // Movimentation
     private bool facingRight = true;
@@ -18,7 +20,7 @@ public class PrinceController2D : MonoBehaviour
 
     // Run
     [SerializeField]
-    public float runSpeed = 40f;
+    public float runSpeed;
 
     private float horizontalMove = 0f;
     private bool run = true;
@@ -32,7 +34,7 @@ public class PrinceController2D : MonoBehaviour
     // Roll
     [SerializeField] private Collider2D rollDisableCollider;
 
-    [SerializeField] private float rollForce = 3f;
+    [SerializeField] private float rollForce;
     private bool roll;
 
     // Attack
@@ -45,9 +47,18 @@ public class PrinceController2D : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        nextLevel = 1;
+        gameOverScene = 2;
+        endingScene = 3;
+
+        runSpeed = 50f;
+        rollForce = 2f;
+
         animator = GetComponent<Animator>();
+
         run = true;
         canMove = true;
+
         gm = GameManager.GetInstance();
     }
 
@@ -76,7 +87,6 @@ public class PrinceController2D : MonoBehaviour
         {
             Reset();
             Debug.Log($"Vidas: {gm.lifes}");
-            Debug.Log($"Pontos: {gm.points}");
         }
 
         // === Prince Movimentation ===
@@ -123,15 +133,18 @@ public class PrinceController2D : MonoBehaviour
 
     private void Reset()
     {
-        //if (gm.lifes <= 0)
-        //{
-        //    SceneManager.LoadScene(gameOverScene);
-        //}
-
-        Vector3 playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
-        transform.position = new Vector3(-6, 0, 0);
-
         gm.lifes--;
+        if (gm.lifes < 0)
+        {
+            canMove = false;
+            run = false;
+            SceneManager.LoadScene(gameOverScene);
+        }
+        else
+        {
+            Vector3 playerPosition = GameObject.FindGameObjectWithTag("Player").transform.position;
+            transform.position = new Vector3(-7, -1, 0);
+        }
     }
 
     private void FixedUpdate()
@@ -194,6 +207,7 @@ public class PrinceController2D : MonoBehaviour
                     Debug.Log("Hit object with tag " + col.gameObject.tag + "!");
                     if (col.gameObject.tag == "villager") col.gameObject.GetComponent<Villager>().Die();
                     else if (col.gameObject.tag == "villagerIdle") col.gameObject.GetComponent<VillagerIdle>().Die();
+                    else if (col.gameObject.tag == "boss") col.gameObject.GetComponent<FinalBoss>().TakeDamage();
                 };
             }
             attack = false;
@@ -227,7 +241,8 @@ public class PrinceController2D : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "levelEnd") SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        if (collision.gameObject.tag == "levelEnd") SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + nextLevel);
+        else if (collision.gameObject.tag == "gameEnd") SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + endingScene);
     }
 
     // Animation Events
