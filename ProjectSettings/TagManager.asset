@@ -6,9 +6,11 @@ TagManager:
   tags:
   - Ground
   - Wall
-  - oldMan
   - Edge
   - levelEnd
+  - falling
+  - villager
+  - villagerIdle
   layers:
   - Default
   - TransparentFX
