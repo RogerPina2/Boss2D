@@ -40,7 +40,7 @@ public class PrinceController2D : MonoBehaviour
 
     private int currentAttack = 0;
     private bool attack;
-    private float attackRadius = 1.5f;
+    private float attackRadius = 0.5f;
 
     // Start is called before the first frame update
     private void Start()
@@ -179,7 +179,7 @@ public class PrinceController2D : MonoBehaviour
 
     private void Combat()
     {
-        List<string> ignore = new List<string> { "Wall", "Ground", "Player", "Edge" };
+        List<string> ignore = new List<string> { "Wall", "Ground", "Player", "Edge", "falling" };
         // Attack
         if (attack)
         {
@@ -192,7 +192,8 @@ public class PrinceController2D : MonoBehaviour
                 if (!ignore.Contains(col.gameObject.tag))
                 {
                     Debug.Log("Hit object with tag " + col.gameObject.tag + "!");
-                    col.gameObject.GetComponent<OldMan>().Die();
+                    if (col.gameObject.tag == "villager") col.gameObject.GetComponent<Villager>().Die();
+                    else if (col.gameObject.tag == "villagerIdle") col.gameObject.GetComponent<VillagerIdle>().Die();
                 };
             }
             attack = false;
@@ -217,7 +218,7 @@ public class PrinceController2D : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Ground")
+        if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "falling")
         {
             isGrounded = true;
             OnLanding();

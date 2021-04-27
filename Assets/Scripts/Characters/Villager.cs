@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class OldMan : MonoBehaviour
+public class Villager : MonoBehaviour
 {
     public bool facingRight;
     public float speed;
