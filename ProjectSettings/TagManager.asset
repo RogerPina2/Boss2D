@@ -7,6 +7,8 @@ TagManager:
   - Ground
   - Wall
   - oldMan
+  - Edge
+  - levelEnd
   layers:
   - Default
   - TransparentFX
